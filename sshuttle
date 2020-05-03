@@ -1,0 +1,3 @@
+#sshuttle ALL=(root) NOPASSWD: /usr/bin/python /usr/share/sshuttle/main.py /usr/bin/python --firewall 12*** 0
+#sshuttle ALL=(root) NOPASSWD: /usr/bin/python /usr/bin/sshuttle, /usr/bin/python --firewall 12*** 0
+sshuttle ALL=(root) NOPASSWD: ALL

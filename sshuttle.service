@@ -1,0 +1,12 @@
+[Unit]
+Description=sshuttle service
+After=network.target
+[Service]
+User=sshuttle
+Restart=always
+Type=forking
+WorkingDirectory=/home/sshuttle
+ExecStart=/home/sshuttle/sshuttle.sh start
+ExecStop=/home/sshuttle/sshuttle.sh stop
+[Install]
+WantedBy=multi-user.target
