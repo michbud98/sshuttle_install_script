@@ -92,34 +92,23 @@ set_sudoers(){
 # Install sshuttle and its dependencies
 install_sshuttle()
 {
-	[ $DEBUG -eq 1 ] && set -x
-	apt list --installed 2>/dev/null | grep sshuttle # ask if sshuttle is already installed
-	RC=$?
-	if [ $RC -eq 0 ]; then
-		echo "ERROR: Sshuttle already installed."
+    [ $DEBUG -eq 1 ] && set -x
+    apt list --installed 2>/dev/null | grep sshuttle # ask if sshuttle is already installed
+    RC=$?
+    if [ $RC -eq 0 ]; then
+        echo "ERROR: Sshuttle already installed."
 
-	elif [ $RC -ne 0 ]; then
-		echo " Sshuttle is not installed. Installing now."
-		apt install python3
-		sleep 5
-		apt install sshuttle
-	fi
+    elif [ $RC -ne 0 ]; then
+        echo " Sshuttle is not installed. Installing now."
+        apt install -f /home/wasadmin/sshuttle_install/sshuttle_bin/*
+    fi
 
-	# checks if sshuttle was installed if not runs retry
-	sshuttle -v
-	RC=$?
-	if [ $RC -ne 0 ]; then
-        echo "ERROR: Sshuttle wasnt installed. Running retry."
-		apt install python3
-		sleep 5
-        apt install sshuttle
-		RC=$?
-    	if [ $RC -ne 0 ]; then
-			echo "ERROR: Sshuttle wasnt installed. Try running this script again later."
-			exit 1
-		fi
-	fi
+    RC=$?
+    if [ $RC -ne 0 ]; then
+        echo " Sshuttle is was not installed. You need to try again later."
+    fi
 }
+
 
 # Create sshuttle as a service by coping files from script directory
 create_sshuttle_service()
@@ -137,12 +126,12 @@ create_sshuttle_service()
 	systemctl status sshuttle | grep sshuttle.service
 	RC=$?
 	if [ $RC -eq 0 ]; then
-                echo "Sshuttle service was correctly created."
+        echo "Sshuttle service was correctly created."
 		echo "Enabling sshuttle"
 	        systemctl enable sshuttle # Commands sshuttle service to run on system start
 
         elif [ $RC -ne 0 ]; then
-                echo "ERROR: Sshuttle service was not correctly created"
+            echo "ERROR: Sshuttle service was not correctly created"
         fi
 
 }
